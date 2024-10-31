@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?><process version="10.5.000">
+  <context>
+    <input/>
+    <output/>
+    <macros/>
+  </context>
+  <operator activated="true" class="process" compatibility="10.5.000" expanded="true" name="Process">
+    <parameter key="logverbosity" value="init"/>
+    <parameter key="random_seed" value="2001"/>
+    <parameter key="send_mail" value="never"/>
+    <parameter key="notification_email" value=""/>
+    <parameter key="process_duration_for_mail" value="30"/>
+    <parameter key="encoding" value="SYSTEM"/>
+    <process expanded="true">
+      <operator activated="true" class="retrieve" compatibility="10.5.000" expanded="true" height="68" name="Retrieve Transactions" width="90" x="648" y="34">
+        <parameter key="repository_entry" value="//Samples/data/Transactions"/>
+      </operator>
+      <operator activated="true" class="store" compatibility="10.5.000" expanded="true" height="68" name="Store" width="90" x="782" y="34">
+        <parameter key="repository_entry" value="lab2"/>
+      </operator>
+      <operator activated="true" class="write_csv" compatibility="10.5.000" expanded="true" height="82" name="Write CSV" width="90" x="916" y="34">
+        <parameter key="csv_file" value="E:/2024秋/机器学习/大数据与商业智能-2024-王杉/Lab 2/lab2.csv"/>
+        <parameter key="column_separator" value=","/>
+        <parameter key="write_attribute_names" value="true"/>
+        <parameter key="quote_nominal_values" value="true"/>
+        <parameter key="format_date_attributes" value="true"/>
+        <parameter key="date_format" value="yyyy-MM-dd HH:mm:ss"/>
+        <parameter key="append_to_file" value="false"/>
+        <parameter key="encoding" value="SYSTEM"/>
+      </operator>
+      <connect from_op="Retrieve Transactions" from_port="output" to_op="Store" to_port="input"/>
+      <connect from_op="Store" from_port="through" to_op="Write CSV" to_port="input"/>
+      <connect from_op="Write CSV" from_port="through" to_port="result 1"/>
+      <portSpacing port="source_input 1" spacing="0"/>
+      <portSpacing port="sink_result 1" spacing="0"/>
+      <portSpacing port="sink_result 2" spacing="0"/>
+    </process>
+  </operator>
+</process>

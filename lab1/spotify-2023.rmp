@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?><process version="10.5.000">
+  <context>
+    <input/>
+    <output/>
+    <macros/>
+  </context>
+  <operator activated="true" class="process" compatibility="10.5.000" expanded="true" name="Process">
+    <parameter key="logverbosity" value="init"/>
+    <parameter key="random_seed" value="2001"/>
+    <parameter key="send_mail" value="never"/>
+    <parameter key="notification_email" value=""/>
+    <parameter key="process_duration_for_mail" value="30"/>
+    <parameter key="encoding" value="SYSTEM"/>
+    <process expanded="true">
+      <operator activated="true" class="read_csv" compatibility="10.5.000" expanded="true" height="68" name="Read CSV" width="90" x="45" y="238">
+        <parameter key="csv_file" value="F:/OneDrive/Documents/SYSU/Teaching/BD&amp;BI/BDBI 2024/Lab 1/spotify-2023.csv"/>
+        <parameter key="column_separators" value=","/>
+        <parameter key="trim_lines" value="false"/>
+        <parameter key="multiline_text" value="false"/>
+        <parameter key="use_quotes" value="true"/>
+        <parameter key="quotes_character" value="&quot;"/>
+        <parameter key="escape_character" value="\"/>
+        <parameter key="skip_comments" value="false"/>
+        <parameter key="comment_characters" value="#"/>
+        <parameter key="starting_row" value="1"/>
+        <parameter key="parse_numbers" value="true"/>
+        <parameter key="decimal_character" value="."/>
+        <parameter key="grouped_digits" value="false"/>
+        <parameter key="grouping_character" value=","/>
+        <parameter key="infinity_representation" value=""/>
+        <parameter key="date_format" value=""/>
+        <parameter key="use_header_row" value="true"/>
+        <parameter key="header_row" value="1"/>
+        <parameter key="first_row_as_names" value="true"/>
+        <list key="annotations"/>
+        <parameter key="time_zone" value="SYSTEM"/>
+        <parameter key="locale" value="English (United States)"/>
+        <parameter key="encoding" value="GBK"/>
+        <parameter key="read_all_values_as_polynominal" value="false"/>
+        <list key="data_set_meta_data_information">
+          <parameter key="0" value="track_name.true.polynominal.attribute"/>
+          <parameter key="1" value="artist(s)_name.true.polynominal.attribute"/>
+          <parameter key="2" value="artist_count.true.integer.attribute"/>
+          <parameter key="3" value="released_year.true.integer.attribute"/>
+          <parameter key="4" value="released_month.true.integer.attribute"/>
+          <parameter key="5" value="released_day.true.integer.attribute"/>
+          <parameter key="6" value="in_spotify_playlists.true.integer.attribute"/>
+          <parameter key="7" value="in_spotify_charts.true.integer.attribute"/>
+          <parameter key="8" value="streams.true.real.attribute"/>
+          <parameter key="9" value="in_apple_playlists.true.integer.attribute"/>
+          <parameter key="10" value="in_apple_charts.true.integer.attribute"/>
+          <parameter key="11" value="in_deezer_playlists.true.polynominal.attribute"/>
+          <parameter key="12" value="in_deezer_charts.true.integer.attribute"/>
+          <parameter key="13" value="in_shazam_charts.true.polynominal.attribute"/>
+          <parameter key="14" value="bpm.true.integer.attribute"/>
+          <parameter key="15" value="key.true.polynominal.attribute"/>
+          <parameter key="16" value="mode.true.polynominal.attribute"/>
+          <parameter key="17" value="danceability_%.true.integer.attribute"/>
+          <parameter key="18" value="valence_%.true.integer.attribute"/>
+          <parameter key="19" value="energy_%.true.integer.attribute"/>
+          <parameter key="20" value="acousticness_%.true.integer.attribute"/>
+          <parameter key="21" value="instrumentalness_%.true.integer.attribute"/>
+          <parameter key="22" value="liveness_%.true.integer.attribute"/>
+          <parameter key="23" value="speechiness_%.true.integer.attribute"/>
+        </list>
+        <parameter key="read_not_matching_values_as_missings" value="true"/>
+      </operator>
+      <operator activated="true" class="guess_types" compatibility="10.5.000" expanded="true" height="82" name="Guess Types" width="90" x="179" y="238">
+        <parameter key="attribute_filter_type" value="all"/>
+        <parameter key="attribute" value=""/>
+        <parameter key="attributes" value="in_shazam_charts|streams"/>
+        <parameter key="use_except_expression" value="false"/>
+        <parameter key="value_type" value="attribute_value"/>
+        <parameter key="use_value_type_exception" value="false"/>
+        <parameter key="except_value_type" value="time"/>
+        <parameter key="block_type" value="attribute_block"/>
+        <parameter key="use_block_type_exception" value="false"/>
+        <parameter key="except_block_type" value="value_matrix_row_start"/>
+        <parameter key="invert_selection" value="false"/>
+        <parameter key="include_special_attributes" value="false"/>
+        <parameter key="decimal_point_character" value="."/>
+        <parameter key="number_grouping_character" value=","/>
+      </operator>
+      <operator activated="true" class="blending:set_role" compatibility="10.5.000" expanded="true" height="82" name="Set Role" width="90" x="313" y="238">
+        <list key="set_roles">
+          <parameter key="streams" value="label"/>
+        </list>
+      </operator>
+      <operator activated="true" class="blending:generate_columns" compatibility="10.5.000" expanded="true" height="82" name="Generate Attributes" width="90" x="447" y="238">
+        <list key="function_descriptions">
+          <parameter key="released_date" value="concat(str(released_year),&quot;-&quot;,str(released_month),&quot;-&quot;,str(released_day))"/>
+        </list>
+        <parameter key="keep_all_columns" value="true"/>
+        <parameter key="default_time_zone" value="Asia/Shanghai"/>
+      </operator>
+      <operator activated="true" class="numerical_to_polynominal" compatibility="10.5.000" expanded="true" height="82" name="Numerical to Polynominal" width="90" x="313" y="34">
+        <parameter key="attribute_filter_type" value="subset"/>
+        <parameter key="attribute" value=""/>
+        <parameter key="attributes" value="released_year|released_month|released_day"/>
+        <parameter key="use_except_expression" value="false"/>
+        <parameter key="value_type" value="numeric"/>
+        <parameter key="use_value_type_exception" value="false"/>
+        <parameter key="except_value_type" value="real"/>
+        <parameter key="block_type" value="value_series"/>
+        <parameter key="use_block_type_exception" value="false"/>
+        <parameter key="except_block_type" value="value_series_end"/>
+        <parameter key="invert_selection" value="false"/>
+        <parameter key="include_special_attributes" value="false"/>
+      </operator>
+      <operator activated="true" class="generate_concatenation" compatibility="10.5.000" expanded="true" height="82" name="Generate Concatenation" width="90" x="447" y="34">
+        <parameter key="first_attribute" value="released_year"/>
+        <parameter key="second_attribute" value="released_month"/>
+        <parameter key="separator" value="-"/>
+        <parameter key="trim_values" value="false"/>
+      </operator>
+      <operator activated="true" class="generate_concatenation" compatibility="10.5.000" expanded="true" height="82" name="Generate Concatenation (2)" width="90" x="581" y="34">
+        <parameter key="first_attribute" value="released_year-released_month"/>
+        <parameter key="second_attribute" value="released_day"/>
+        <parameter key="separator" value="-"/>
+        <parameter key="trim_values" value="false"/>
+      </operator>
+      <operator activated="true" class="nominal_to_date" compatibility="10.5.000" expanded="true" height="82" name="Nominal to Date (2)" width="90" x="715" y="34">
+        <parameter key="attribute_name" value="released_year-released_month-released_day"/>
+        <parameter key="date_type" value="date"/>
+        <parameter key="date_format" value="yyyy-MM-dd"/>
+        <parameter key="time_zone" value="Asia/Shanghai"/>
+        <parameter key="locale" value="English (United States)"/>
+        <parameter key="keep_old_attribute" value="false"/>
+      </operator>
+      <operator activated="true" class="nominal_to_date" compatibility="10.5.000" expanded="true" height="82" name="Nominal to Date" width="90" x="581" y="238">
+        <parameter key="attribute_name" value="released_date"/>
+        <parameter key="date_type" value="date"/>
+        <parameter key="date_format" value="yyyy-MM-dd"/>
+        <parameter key="time_zone" value="Asia/Shanghai"/>
+        <parameter key="locale" value="English (United States)"/>
+        <parameter key="keep_old_attribute" value="false"/>
+      </operator>
+      <operator activated="true" class="filter_examples" compatibility="10.5.000" expanded="true" height="103" name="Filter Examples (2)" width="90" x="715" y="238">
+        <parameter key="parameter_expression" value=""/>
+        <parameter key="condition_class" value="custom_filters"/>
+        <parameter key="invert_filter" value="false"/>
+        <list key="filters_list">
+          <parameter key="filters_entry_key" value="streams.is_not_missing."/>
+        </list>
+        <parameter key="filters_logic_and" value="true"/>
+        <parameter key="filters_check_metadata" value="true"/>
+      </operator>
+      <operator activated="true" class="replace_missing_values" compatibility="10.5.000" expanded="true" height="103" name="Replace Missing Values" width="90" x="45" y="391">
+        <parameter key="return_preprocessing_model" value="false"/>
+        <parameter key="attribute_filter_type" value="subset"/>
+        <parameter key="attribute" value=""/>
+        <parameter key="attributes" value="in_shazam_charts|key|streams"/>
+        <parameter key="use_except_expression" value="false"/>
+        <parameter key="value_type" value="attribute_value"/>
+        <parameter key="use_value_type_exception" value="false"/>
+        <parameter key="except_value_type" value="time"/>
+        <parameter key="block_type" value="attribute_block"/>
+        <parameter key="use_block_type_exception" value="false"/>
+        <parameter key="except_block_type" value="value_matrix_row_start"/>
+        <parameter key="invert_selection" value="false"/>
+        <parameter key="include_special_attributes" value="false"/>
+        <parameter key="default" value="value"/>
+        <list key="columns">
+          <parameter key="streams" value="average"/>
+          <parameter key="in_shazam_charts" value="average"/>
+          <parameter key="key" value="value"/>
+        </list>
+        <parameter key="replenishment_value" value="#"/>
+      </operator>
+      <operator activated="true" class="aggregate" compatibility="10.5.000" expanded="true" height="82" name="Aggregate" width="90" x="179" y="391">
+        <parameter key="use_default_aggregation" value="false"/>
+        <parameter key="attribute_filter_type" value="all"/>
+        <parameter key="attribute" value=""/>
+        <parameter key="attributes" value=""/>
+        <parameter key="use_except_expression" value="false"/>
+        <parameter key="value_type" value="attribute_value"/>
+        <parameter key="use_value_type_exception" value="false"/>
+        <parameter key="except_value_type" value="time"/>
+        <parameter key="block_type" value="attribute_block"/>
+        <parameter key="use_block_type_exception" value="false"/>
+        <parameter key="except_block_type" value="value_matrix_row_start"/>
+        <parameter key="invert_selection" value="false"/>
+        <parameter key="include_special_attributes" value="false"/>
+        <parameter key="default_aggregation_function" value="average"/>
+        <list key="aggregation_attributes">
+          <parameter key="track_name" value="count"/>
+        </list>
+        <parameter key="group_by_attributes" value="track_name|artist(s)_name"/>
+        <parameter key="count_all_combinations" value="false"/>
+        <parameter key="only_distinct" value="false"/>
+        <parameter key="ignore_missings" value="true"/>
+      </operator>
+      <operator activated="true" class="concurrency:join" compatibility="10.5.000" expanded="true" height="82" name="Join" width="90" x="313" y="391">
+        <parameter key="remove_double_attributes" value="true"/>
+        <parameter key="join_type" value="left"/>
+        <parameter key="use_id_attribute_as_key" value="false"/>
+        <list key="key_attributes">
+          <parameter key="track_name" value="track_name"/>
+          <parameter key="artist(s)_name" value="artist(s)_name"/>
+        </list>
+        <parameter key="keep_both_join_attributes" value="false"/>
+      </operator>
+      <operator activated="true" class="filter_examples" compatibility="10.5.000" expanded="true" height="103" name="Filter Examples" width="90" x="447" y="391">
+        <parameter key="parameter_expression" value=""/>
+        <parameter key="condition_class" value="custom_filters"/>
+        <parameter key="invert_filter" value="true"/>
+        <list key="filters_list">
+          <parameter key="filters_entry_key" value="count(track_name).ge.2"/>
+        </list>
+        <parameter key="filters_logic_and" value="true"/>
+        <parameter key="filters_check_metadata" value="true"/>
+      </operator>
+      <operator activated="true" class="blending:select_attributes" compatibility="10.5.000" expanded="true" height="82" name="Select Attributes" width="90" x="581" y="391">
+        <parameter key="type" value="exclude attributes"/>
+        <parameter key="attribute_filter_type" value="a subset"/>
+        <parameter key="select_attribute" value=""/>
+        <parameter key="select_subset" value="released_day␞released_month␞released_year␞count(track_name)"/>
+        <parameter key="also_apply_to_special_attributes_(id,_label..)" value="false"/>
+      </operator>
+      <operator activated="true" class="blending:generate_id" compatibility="10.5.000" expanded="true" height="82" name="Generate ID" width="90" x="715" y="391">
+        <parameter key="create_nominal_ids" value="false"/>
+        <parameter key="offset" value="0"/>
+      </operator>
+      <connect from_op="Read CSV" from_port="output" to_op="Guess Types" to_port="example set input"/>
+      <connect from_op="Guess Types" from_port="example set output" to_op="Set Role" to_port="example set input"/>
+      <connect from_op="Set Role" from_port="example set output" to_op="Generate Attributes" to_port="table input"/>
+      <connect from_op="Generate Attributes" from_port="table output" to_op="Nominal to Date" to_port="example set input"/>
+      <connect from_op="Generate Attributes" from_port="original" to_op="Numerical to Polynominal" to_port="example set input"/>
+      <connect from_op="Numerical to Polynominal" from_port="example set output" to_op="Generate Concatenation" to_port="example set input"/>
+      <connect from_op="Generate Concatenation" from_port="example set output" to_op="Generate Concatenation (2)" to_port="example set input"/>
+      <connect from_op="Generate Concatenation (2)" from_port="example set output" to_op="Nominal to Date (2)" to_port="example set input"/>
+      <connect from_op="Nominal to Date" from_port="example set output" to_op="Filter Examples (2)" to_port="example set input"/>
+      <connect from_op="Filter Examples (2)" from_port="example set output" to_op="Replace Missing Values" to_port="example set input"/>
+      <connect from_op="Replace Missing Values" from_port="example set output" to_op="Aggregate" to_port="example set input"/>
+      <connect from_op="Aggregate" from_port="example set output" to_op="Join" to_port="right"/>
+      <connect from_op="Aggregate" from_port="original" to_op="Join" to_port="left"/>
+      <connect from_op="Join" from_port="join" to_op="Filter Examples" to_port="example set input"/>
+      <connect from_op="Filter Examples" from_port="example set output" to_op="Select Attributes" to_port="example set input"/>
+      <connect from_op="Select Attributes" from_port="example set output" to_op="Generate ID" to_port="example set input"/>
+      <connect from_op="Generate ID" from_port="example set output" to_port="result 1"/>
+      <portSpacing port="source_input 1" spacing="0"/>
+      <portSpacing port="sink_result 1" spacing="0"/>
+      <portSpacing port="sink_result 2" spacing="0"/>
+      <description align="center" color="yellow" colored="false" height="86" resized="true" width="113" x="300" y="158">&amp;#25105;&amp;#20204;&amp;#24819;&amp;#35201;&amp;#39044;&amp;#27979;&amp;#25773;&amp;#25918;&amp;#37327;&amp;#65292;&amp;#22240;&amp;#27492;streams&amp;#30340;role&amp;#35774;&amp;#20026;&amp;#26631;&amp;#31614;label</description>
+      <description align="center" color="yellow" colored="false" height="82" resized="true" width="131" x="21" y="156">&amp;#35835;&amp;#21462;&amp;#25968;&amp;#25454;&amp;#27880;&amp;#24847;&amp;#19981;&amp;#35201;&amp;#25226;#&amp;#21495;&amp;#20316;&amp;#20026;&amp;#27880;&amp;#37322;&amp;#31526;&amp;#21495;&lt;br&gt;&amp;#35831;&amp;#33258;&amp;#34892;&amp;#20462;&amp;#25913;&amp;#25991;&amp;#20214;&amp;#36335;&amp;#24452;</description>
+      <description align="center" color="yellow" colored="false" height="85" resized="true" width="116" x="164" y="157">&amp;#26631;&amp;#35782;&amp;#25968;&amp;#23383;&amp;#37324;&amp;#30340;&amp;#21315;&amp;#20301;&amp;#31526;&amp;#65292;&amp;#35753;&amp;#31995;&amp;#32479;&amp;#37325;&amp;#26032;&amp;#35782;&amp;#21035;&amp;#23646;&amp;#24615;&amp;#31867;&amp;#22411;</description>
+      <description align="center" color="yellow" colored="false" height="100" resized="true" width="121" x="696" y="162">&amp;#25773;&amp;#25918;&amp;#37327;&amp;#26159;&amp;#25105;&amp;#20204;&amp;#20851;&amp;#24515;&amp;#30340;&amp;#20540;&amp;#65292;&amp;#21024;&amp;#38500;&amp;#32570;&amp;#22833;&amp;#25773;&amp;#25918;&amp;#37327;&amp;#30340;&amp;#25968;&amp;#25454;&amp;#23545;&amp;#35937;</description>
+      <description align="center" color="yellow" colored="false" height="103" resized="true" width="110" x="304" y="500">&amp;#23558;&amp;#35745;&amp;#25968;&amp;#65288;&amp;#22312;tight&amp;#65289;&amp;#25340;&amp;#25509;&amp;#21040;&amp;#21407;&amp;#25968;&amp;#25454;&amp;#65288;left&amp;#65289;</description>
+      <description align="center" color="yellow" colored="false" height="94" resized="true" width="101" x="441" y="497">&amp;#23558;&amp;#35745;&amp;#25968;&amp;#22823;&amp;#20110;2&amp;#30340;&amp;#21024;&amp;#21435;&amp;#65288;&amp;#19981;&amp;#19968;&amp;#33268;&amp;#30340;&amp;#25968;&amp;#25454;&amp;#65289;</description>
+      <description align="center" color="yellow" colored="false" height="85" resized="true" width="95" x="578" y="503">&amp;#21435;&amp;#25481;&amp;#19981;&amp;#38656;&amp;#35201;&amp;#30340;&amp;#21015;</description>
+      <description align="center" color="yellow" colored="false" height="117" resized="true" width="105" x="714" y="502">&amp;#29983;&amp;#25104;&amp;#19968;&amp;#20010;&amp;#21807;&amp;#19968;id&amp;#21015;&amp;#65307;&amp;#22240;&amp;#20026;&amp;#26377;&amp;#19981;&amp;#21516;&amp;#27468;&amp;#25163;&amp;#21516;&amp;#26679;&amp;#27468;&amp;#21517;&amp;#65307;track_name&amp;#19981;&amp;#33021;&amp;#20316;&amp;#20026;&amp;#21807;&amp;#19968;&amp;#26631;&amp;#35782;&amp;#21015;</description>
+      <description align="center" color="yellow" colored="false" height="115" resized="false" width="116" x="168" y="497">&amp;#21457;&amp;#29616;track_name&amp;#26377;&amp;#37325;&amp;#22797;&amp;#39033;&amp;#65292;&amp;#20808;&amp;#26681;&amp;#25454;track_name + artist_name&amp;#35745;&amp;#25968;&amp;#19968;&amp;#19979;</description>
+      <description align="center" color="yellow" colored="false" height="86" resized="true" width="245" x="429" y="160">&amp;#23558;&amp;#24180;&amp;#26376;&amp;#26085;&amp;#25340;&amp;#25104;&amp;#26085;&amp;#26399;&amp;#65292;&amp;#20351;&amp;#29992;&amp;#19968;&amp;#20123;&amp;#20123;&amp;#20989;&amp;#25968;&amp;#65292;&amp;#20063;&amp;#21487;&amp;#20197;&amp;#20351;&amp;#29992;type&amp;#36716;&amp;#25442;&amp;#21644;&amp;#20004;&amp;#27425;concatenate&amp;#31639;&amp;#23376;&amp;#65292;&amp;#35265;&amp;#19978;&amp;#36793;&lt;br&gt;</description>
+      <description align="center" color="green" colored="true" height="120" resized="true" width="523" x="295" y="10">&amp;#19981;&amp;#20351;&amp;#29992;&amp;#20989;&amp;#25968;&amp;#30340;&amp;#29983;&amp;#25104;&amp;#26085;&amp;#26399;&amp;#26041;&amp;#24335;</description>
+      <description align="center" color="yellow" colored="false" height="115" resized="false" width="116" x="36" y="499">&amp;#23545;&amp;#20110;&amp;#25490;&amp;#21517;&amp;#32570;&amp;#22833;&amp;#20540;&amp;#29992;&amp;#22343;&amp;#20540;&amp;#20195;&amp;#26367;&amp;#65292;&amp;#23545;&amp;#20110;key&amp;#32570;&amp;#22833;&amp;#20540;&amp;#29992;&amp;#29305;&amp;#27530;&amp;#20540;&amp;#8220;#&amp;#8221;&amp;#20195;&amp;#26367;</description>
+    </process>
+  </operator>
+</process>
